@@ -1,0 +1,17 @@
+<div class="pa-record-container">
+
+  <reservation-component class="card-item" *ngFor="let reservationRecord of reservationRecords" [reservationRecord]="reservationRecord"
+                         (confirmEvent) = "confirm()"></reservation-component>
+
+  <!--<div *ngFor="let parecord of parecords">{{parecord}}</div>-->
+
+
+</div>
+
+
+<!--
+<div class="fab-container">
+  <button mat-flat-button color="primary"  matTooltip="Add new class" (click)="createPARecord()">
+    <i class="material-icons">add</i>
+  </button>
+</div> -->

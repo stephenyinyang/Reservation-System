@@ -1,0 +1,50 @@
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td{
+  height: 5px;
+  width: 175px;
+  text-align: center;
+}
+
+.time, .header {
+  font-weight: bold;
+}
+
+.cell:hover {background-color: #f5f5f5;}
+
+.date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  padding: 20px;
+}
+
+
+.reserve {
+  float: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  padding: 20px;
+}
+
+.reservations {
+  margin: auto;
+  padding: 20px;
+}
+
+.pending {
+  background-color: yellow;
+}
+
+.confirmed {
+  background-color: limegreen;
+}
+
+/*[id='11'] {*/
+/*  background-color: yellow;*/
+/*}*/

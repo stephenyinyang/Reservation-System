@@ -1,0 +1,62 @@
+<div class = "date">
+  <mat-form-field>
+  <mat-label>Choose Reservation Date:</mat-label>
+  <input matInput [(ngModel)]="createdDate" [value]="createdDate" [matDatepicker]="picker"
+         (dateInput)="changedDate($event)">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</div>
+<!--//<request-reservation *ngIf="requesting" class = "reserve"></request-reservation>-->
+<div class = "reservations">
+  <table>
+    <tr>
+      <td class = "header">Time</td>
+      <td *ngFor="let header of column_headers" class = "header">{{header}}</td>
+    </tr>
+    <tr *ngFor="let time of times; let timeIndex=index;">
+      <td class = "time">{{time}}</td>
+      <td *ngFor="let cell of cells; let indexOfelement=index;" class = "cell"  id="{{timeIndex}}{{indexOfelement}}" (click)="edit(time, indexOfelement, timeIndex)"
+          [class.highlighted]="cell.reserved === true">{{cell.name}}</td>
+    </tr>
+  <!--  <tr *ngFor="let row of columns">{{row}}-->
+  <!--    <td *ngFor="let cell of rows">{{cell}}</td>-->
+  <!--  </tr>-->
+  </table>
+</div>
+
+<!--<div class = "time1">-->
+<!--<table mat-table [dataSource]="dataSource" class="time1">-->
+
+<!--  &lt;!&ndash;- Note that these columns can be defined in any order.-->
+<!--        The actual rendered columns are set as a property on the row definition" &ndash;&gt;-->
+
+<!--  &lt;!&ndash; Position Column &ndash;&gt;-->
+<!--  <ng-container matColumnDef="time" class="time1">-->
+<!--    <th mat-header-cell *matHeaderCellDef> Time </th>-->
+<!--    <td mat-cell *matCellDef="let element"> {{element.time}} </td>-->
+<!--  </ng-container>-->
+
+
+<!--  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!--  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
+<!--</table>-->
+<!--</div>-->
+<!--<div class = "time2">-->
+<!--<table mat-table [dataSource]="dataSource" class="time2">-->
+
+<!--  &lt;!&ndash;- Note that these columns can be defined in any order.-->
+<!--        The actual rendered columns are set as a property on the row definition" &ndash;&gt;-->
+
+<!--  &lt;!&ndash; Position Column &ndash;&gt;-->
+<!--  <ng-container matColumnDef="time" class="time2">-->
+<!--    <th mat-header-cell *matHeaderCellDef> Time </th>-->
+<!--    <td mat-cell *matCellDef="let element"> {{element.time}} </td>-->
+<!--  </ng-container>-->
+
+
+<!--  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!--  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
+<!--</table>-->
+<!--</div>-->
+

@@ -1,0 +1,38 @@
+<form [formGroup]="requestForm">
+  <mat-card class="req">
+    <mat-card-header class = "title">
+
+      <mat-card-title>Request Court Reservation</mat-card-title>
+      <mat-card-title>Starting at: {{startString}}</mat-card-title>
+
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>Select Court</mat-label>
+          <mat-select [(value)]="court" placeholder="Select Court" formControlName="court">
+            <mat-option [value]="court.name" *ngFor="let court of courts;">{{court.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+
+        <mat-form-field >
+          <mat-label>How Many Hours?</mat-label>
+          <input matInput type="number" step="0.5" placeholder="Hours" formControlName="hours" [(ngModel)]="hours">
+        </mat-form-field>
+      </div>
+
+      <div class="button">
+        <button mat-button color="accent" (click)="save()">Request</button>
+      </div>
+      <div class="button">
+        <button mat-button color="accent" (click)="cancel()">Cancel</button>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+
+</form>

@@ -1,0 +1,12 @@
+.req {
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+}

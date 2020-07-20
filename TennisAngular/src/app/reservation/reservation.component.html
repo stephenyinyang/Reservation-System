@@ -1,0 +1,35 @@
+<!-- add a tooltip that will show the username that created the parecord. Hint: https://stackblitz.com/angular/ygnjpyayagb?file=src%2Fapp%2Ftooltip-message-example.ts-->
+<mat-card class="reservation-card">
+
+  <section class="date">Reserved by: {{reservationRecord.createdBy.email}}</section>
+  <section class = "confirmed">Confirmed: {{reservationRecord.confirmed}}</section>
+  <section class="court"> Court: {{reservationRecord.court}}</section>
+  <section class="calories" >Start: {{reservationRecord.start | date:'medium'}}</section>
+  <section class="time">End: {{reservationRecord.end | date: 'medium'}}</section>
+
+  <div class="menu">
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Delete or edit">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngIf="isAdmin" (click)="confirm(reservationRecord)">
+        <mat-icon>done</mat-icon>
+        <span>Confirm</span>
+      </button>
+      <button mat-menu-item *ngIf="isAdmin" (click)="unconfirm(reservationRecord)">
+        <mat-icon>highlight_off</mat-icon>
+        <span>Unconfirm</span>
+      </button>
+      <button mat-menu-item *ngIf="isAdmin" (click)="deleteAdmin(reservationRecord)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+      <button mat-menu-item *ngIf="isUser" (click)="delete(reservationRecord)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </div>
+
+
+</mat-card>

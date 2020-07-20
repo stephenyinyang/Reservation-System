@@ -1,0 +1,67 @@
+.date {
+  grid-area: date;
+}
+.menu{
+
+  grid-area: menu;
+  justify-self: end;
+  align-self: start;
+}
+
+.type{
+
+  grid-area: type;
+  height:48px !important;
+  width:48px !important;
+  font-size:48px !important;}
+
+.titlecal {
+  grid-area: titlecal;
+}
+
+.court {
+  grid-area: court;
+}
+.titletime {
+  grid-area: titletime;
+}
+.calories {
+  grid-area: calories;
+}
+
+.confirmed {
+  grid-area: confirmed;
+}
+.time {
+  grid-area: time;
+}
+.caloriesgoal{
+  grid-area: caloriesgoal;
+  align-self: end;
+}
+.timegoal {
+  grid-area: timegoal;
+  align-self: end;
+}
+
+.reservation-card {
+  display: grid;
+  grid-template-columns: 50px 50px 50px 50px 50px;
+  grid-template-rows: 75px;
+  grid-template-areas:
+    "date . . confirmed menu"
+
+    "titlecal titlecal . titletime titletime"
+
+    " . . . . . "
+
+    "court . .  timegoal ."
+
+    " . . . . . "
+
+    "calories calories . time time";
+
+}
+
+
+

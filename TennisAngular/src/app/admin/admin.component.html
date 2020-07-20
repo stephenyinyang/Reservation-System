@@ -1,0 +1,35 @@
+<h1>Admin</h1>
+<p>This page can only be accessed by administrators.</p>
+<p>Unconfirmed Reservations:</p>
+
+<div class="pa-record-container">
+
+  <reservation-component class="card-item" *ngFor="let reservationRecord of unconfirmedRecords" [reservationRecord]="reservationRecord"
+                         (confirmEvent) = "confirm()"></reservation-component>
+
+  <!--<div *ngFor="let parecord of parecords">{{parecord}}</div>-->
+
+</div>
+
+<br>
+
+<p>Confirmed Reservations:</p>
+
+<div class="pa-record-container">
+
+  <reservation-component class="card-item" *ngFor="let reservationRecord of confirmedRecords" [reservationRecord]="reservationRecord"
+                         (confirmEvent) = "confirm()"></reservation-component>
+
+  <!--<div *ngFor="let parecord of parecords">{{parecord}}</div>-->
+
+</div>
+
+<br>
+
+<div>
+  All users from secure (admin only) api end point:
+  <ul>
+    <li *ngFor="let user of users"> Name: {{user.firstName}} {{user.lastName}}, Username: {{user.username}}, Email: {{user.email}}, Role: {{user.role}}</li>
+  </ul>
+</div>
+
