@@ -7,7 +7,7 @@ module.exports = {
   getConfirmedReservations,
   getUnconfirmedReservations,
   getAllReservations,
-  getUserReservations,
+  getMemberReservations,
   addReservation,
   deleteReservation,
   confirmReservation,
@@ -18,7 +18,7 @@ module.exports = {
 }
 
 
-//: write the necessary functions that will address the needs of parecord.controller. Hint: look at the signatures in the module.exports. Hint2: look at user.service to see how you can interact with the database. Hint3: look at the class material.
+//: write the necessary functions that will address the needs of parecord.controller. Hint: look at the signatures in the module.exports. Hint2: look at member.service to see how you can interact with the database. Hint3: look at the class material.
 
 async function getUnconfirmedReservations() {
   return await Reservation.find({confirmed: false}).populate('createdBy'); //check if need hash or curly brackets later
@@ -32,7 +32,7 @@ async function getAllReservations() {
   return await Reservation.find().populate('createdBy'); //check if need hash or curly brackets later
 }
 
-async function getUserReservations(username) {
+async function getMemberReservations(username) {
   return await Reservation.find({createdBy: username}).populate('createdBy');
 }
 
@@ -88,7 +88,7 @@ async function addReservation(parecord, username) {
     throw 'Reservation created by"' + username +'" already exists';
   }
   else if(!username){
-    throw 'Error with the user submitting the request. User information missing. Malformed request.';
+    throw 'Error with the member submitting the request. Member information missing. Malformed request.';
   }
  // console.log("Start: " + parecord.start.getHours());
   //populate missing fields in the parecord object

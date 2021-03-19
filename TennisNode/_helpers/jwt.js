@@ -1,5 +1,5 @@
 const expressJwt = require('express-jwt');
-const userService = require('../services/user.service');
+const memberService = require('../services/member.service');
 const config = require('../config.json');
 
 //const pathToRegexp = require('path-to-regexp');
@@ -8,12 +8,12 @@ module.exports = jwt;
 //expressJwt(...) returns a function that takes three paramaters req, res and next. Thus, this will register as middleware.
 function jwt() {
 const secret = config.secret;
-    return new expressJwt({ secret , isRevoked }).unless({
+    return new expressJwt({ secret , isRevoked, algorithms: ['sha1', 'RS256', 'HS256'], }).unless({
         path: [
             // public routes that don't require authentication
             '/',
-            '/user/register',
-            '/user/authenticate',
+            '/member/register',
+            '/member/authenticate',
             // pathToRegexp('/*')
         ]
     });}
@@ -22,13 +22,13 @@ const secret = config.secret;
 async function isRevoked(req, payload, done) {
    // console.log("isRevoked():", req.body, payload);
 
-    const user = await userService.getByUsername(payload.sub);
+    const member = await memberService.getByUsername(payload.sub);
 
 
 
    // console.log("user in JWT",user);
     // revoke token if user no longer exists
-    if (!user) {
+    if (!member) {
 
         return done(null, true);
     }

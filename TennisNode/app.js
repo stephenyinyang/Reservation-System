@@ -8,7 +8,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const router = express.Router();
 
-// Our JWT logic. Uses express-jwt which is a middleware that validates JsonWebTokens and sets req.user.
+// Our JWT logic. Uses express-jwt which is a middleware that validates JsonWebTokens and sets req.member.
 const jwt = require('./_helpers/jwt');
 
 
@@ -21,8 +21,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(jwt());
 
-app.use('/user', require('./routes/user.router'));
-app.use('/parecord', require('./routes/parecord.router'));
+app.use('/member', require('./routes/member.router'));
 app.use('/reservation', require('./routes/reservation.router'));
 //app.use('/')
 app.use(errorHandler);
