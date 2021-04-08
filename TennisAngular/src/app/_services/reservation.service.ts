@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-import {AuthService} from './auth.service';
 import {Reservations} from '../_models/Reservations';
-import {User} from '../_models/user';
 
 
 
@@ -45,7 +42,6 @@ export class ReservationService {
   }
 
   confirm(reservation: Reservations) {
-    //console.log("confirm");
     return this.http.post(`http://localhost:3030/reservation/confirm`, reservation);
   }
 

@@ -7,14 +7,13 @@ import {AuthGuard} from './_services/auth-guard.service';
 import {AdminGuard} from './_services/admin-guard.service';
 import {RegisterComponent} from './register/register.component';
 import {RequestReservationComponent} from './request-reservation/request-reservation.component';
-import {ReservationComponent} from './reservation/reservation.component';
-import {UserviewComponent} from './userview/userview.component';
+import {MemberviewComponent} from './memberview/memberview.component';
 
 const routes: Routes = [{path: '.', component: HomeComponent, canActivate: [AuthGuard]}, {path: 'login', component: LoginComponent},
   {path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
   {path: 'register', component: RegisterComponent},
   {path: 'requestReservation', component: RequestReservationComponent},
-  {path: 'myReservations', component: UserviewComponent, canActivate: [AuthGuard]},
+  {path: 'myReservations', component: MemberviewComponent, canActivate: [AuthGuard]},
   {path: '**', redirectTo: '.'}];
 
 @NgModule({

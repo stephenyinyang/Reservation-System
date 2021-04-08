@@ -24,7 +24,7 @@ export class LoginComponent {
     private notif: NotificationService
   ) {
     // redirect to home if already logged in
-    if (this.authService.currentUserValue) {
+    if (this.authService.currentMemberValue) {
       //   this.router.navigate(['/']);
     }
   }
@@ -35,14 +35,6 @@ export class LoginComponent {
 
   login() {
     this.submitted = true;
-
-    // stop here if form is invalid
-    // if (this.loginForm.invalid) {
-    //   return;
-    // }
-
-    this.loading = true;
-    console.log("username and password", this.username, this.password);
     this.loading = true;
     this.authService.login(this.username, this.password)
       .pipe(first())
@@ -56,7 +48,7 @@ export class LoginComponent {
         error => {
           this.error = error;
           this.loading = false;
-          // show a snackbar to user
+          // show a snackbar to member
           this.notif.showNotif(this.error, 'error');
           console.log('Error', error);
         });

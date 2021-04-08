@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import {NotificationService} from '../_services/notification.service';
-import {UserService} from '../_services/user.service';
+import {MemberService} from '../_services/member.service';
 import {Reservations} from '../_models/Reservations';
 import {ReservationService} from '../_services/reservation.service';
 
 @Component({
-  selector: 'app-userview',
-  templateUrl: './userview.component.html',
-  styleUrls: ['./userview.component.css']
+  selector: 'app-memberview',
+  templateUrl: './memberview.component.html',
+  styleUrls: ['./memberview.component.css']
 })
-export class UserviewComponent implements OnInit {
+export class MemberviewComponent implements OnInit {
 
   reservationRecords: Reservations[] = [];
 

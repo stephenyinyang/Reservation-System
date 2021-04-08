@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {User} from '../_models/user';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ReservationService} from '../_services/reservation.service';
 import {first} from 'rxjs/operators';
 import {NotificationService} from '../_services/notification.service';
+import { AuthService } from '../_services/auth.service';
 
 @Component({
   selector: 'request-reservation',
@@ -29,7 +29,8 @@ export class RequestReservationComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private reservationService: ReservationService,
-              private notification: NotificationService
+              private notification: NotificationService,
+              private auth: AuthService
   ) {}
 
 

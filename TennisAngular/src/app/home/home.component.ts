@@ -1,12 +1,9 @@
 import {Component, NgModule, OnDestroy, OnInit} from '@angular/core';
-import { first } from 'rxjs/operators';
-import {UserService} from '../_services/user.service';
 import {NotificationService} from '../_services/notification.service';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ReservationService} from '../_services/reservation.service';
 import {Reservations} from '../_models/Reservations';
-import {User} from '../_models/user';
 
 @Component({ templateUrl: 'home.component.html' ,
 
@@ -15,7 +12,6 @@ export class HomeComponent implements OnInit {
 
 
   constructor(
-    private userService: UserService,
     private notifService: NotificationService,
     private route: ActivatedRoute,
     private router: Router,

@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NotificationService} from '../_services/notification.service';
-import {UserService} from '../_services/user.service';
+import {MemberService} from '../_services/member.service';
 import {Reservations} from '../_models/Reservations';
-import {User} from '../_models/user';
+import {Member} from '../_models/member';
 import {ReservationService} from '../_services/reservation.service';
 import {Role} from '../_models/role';
 import {Router} from '@angular/router';
@@ -20,13 +20,13 @@ export class ReservationComponent implements OnInit {
   @Input() reservationRecord: Reservations;
   @Output() confirmEvent = new EventEmitter();
 
-  currentUser: User;
+  currentMember: Member;
 
   constructor(private notifService: NotificationService, private reservationService: ReservationService, private router: Router,
               private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.currentUser.subscribe(x => this.currentUser = x);
+    this.authService.currentMember.subscribe(x => this.currentMember = x);
   }
 
   confirm(reservation) {
@@ -99,25 +99,25 @@ export class ReservationComponent implements OnInit {
           this.notifService.showNotif(error);
         });
 
-    this.reservationService.deleteDate(reservation.start)
-      .pipe(first())
-      .subscribe(
-        resp => {
-          this.confirmEvent.emit();
-          this.notifService.showNotif(resp, 'response');
-        },
-        error => {
-          this.notifService.showNotif(error);
-        });
+    // this.reservationService.deleteDate(reservation.start)
+    //   .pipe(first())
+    //   .subscribe(
+    //     resp => {
+    //       this.confirmEvent.emit();
+    //       this.notifService.showNotif(resp, 'response');
+    //     },
+    //     error => {
+    //       this.notifService.showNotif(error);
+    //     });
   }
 
   get isAdmin() {
     // tslint:disable-next-line:max-line-length
-    // In a later version of this code. We will define a class User and have that encompass both the username and role. For now we will just hardcode it.
-    return this.currentUser && this.currentUser.role === Role.admin;
+    // In a later version of this code. We will define a class Member and have that encompass both the username and role. For now we will just hardcode it.
+    return this.currentMember && this.currentMember.role === Role.admin;
   }
-  get isUser() {
-    return this.currentUser && this.currentUser.role === Role.user;
+  get isMember() {
+    return this.currentMember && this.currentMember.role === Role.member;
   }
 
 }

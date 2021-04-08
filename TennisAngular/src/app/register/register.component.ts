@@ -4,9 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { NotificationService } from '../_services/notification.service';
-import { UserService } from '../_services/user.service';
+import { MemberService } from '../_services/member.service';
 import { AuthService } from '../_services/auth.service';
-import {Role} from '../_models/role';
 
 @Component({templateUrl: 'register.component.html',
 
@@ -28,11 +27,11 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private userService: UserService,
+    private memberService: MemberService,
     private notification: NotificationService
   ) {
     // redirect to home if already logged in
-    if (this.authService.currentUserValue) {
+    if (this.authService.currentMemberValue) {
       this.router.navigate(['/']);
     }
   }
@@ -48,7 +47,7 @@ export class RegisterComponent implements OnInit {
 
     });
 
-    this.roles = [{name: 'User'},
+    this.roles = [{name: 'Member'},
       {name: 'Admin'}];
   }
 
@@ -65,7 +64,7 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.userService.register(this.registerForm.value)
+    this.memberService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(
         data => {

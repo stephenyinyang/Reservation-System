@@ -12,7 +12,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AdminComponent } from './admin/admin.component';
 import { ReservationComponent } from './reservation/reservation.component';
-import { UserviewComponent } from './userview/userview.component';
+import { MemberviewComponent } from './memberview/memberview.component';
 import { RequestReservationComponent } from './request-reservation/request-reservation.component';
 
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -33,7 +33,7 @@ import {MatIconModule} from '@angular/material';
     AdminComponent,
     RegisterComponent,
     ReservationComponent,
-    UserviewComponent,
+    MemberviewComponent,
     RequestReservationComponent
   ],
   imports: [

@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {AuthService} from './_services/auth.service';
 import {Router} from '@angular/router';
 import {NotificationService} from './_services/notification.service';
-import {User} from './_models/user';
+import {Member} from './_models/member';
 import {Role} from './_models/role';
 
 @Component({
@@ -12,14 +12,14 @@ import {Role} from './_models/role';
 })
 export class AppComponent {
   title = 'Tennis Website';
-  currentUser: User;
+  currentMember: Member;
 
 
   constructor(  private router: Router,
                 private authService: AuthService,
                 private notifService: NotificationService
   ) {
-    this.authService.currentUser.subscribe(x => this.currentUser = x);
+    this.authService.currentMember.subscribe(x => this.currentMember = x);
   }
   myReservationsClick() {
     this.router.navigate(['/myReservations']);
@@ -31,18 +31,18 @@ export class AppComponent {
 
   get isAdmin() {
     // tslint:disable-next-line:max-line-length
-    // In a later version of this code. We will define a class User and have that encompass both the username and role. For now we will just hardcode it.
-    return this.currentUser && this.currentUser.role === Role.admin;
+    // In a later version of this code. We will define a class Member and have that encompass both the username and role. For now we will just hardcode it.
+    return this.currentMember && this.currentMember.role === Role.admin;
   }
 
-  get isUser() {
+  get isMember() {
 
-    return this.currentUser && this.currentUser.role === Role.user;
+    return this.currentMember && this.currentMember.role === Role.member;
   }
 
   get isLoggedIn() {
 
-    return this.isAdmin || this.isUser;
+    return this.isAdmin || this.isMember;
   }
 
   logout() {
