@@ -9,7 +9,8 @@ import {RegisterComponent} from './register/register.component';
 import {RequestReservationComponent} from './request-reservation/request-reservation.component';
 import {MemberviewComponent} from './memberview/memberview.component';
 
-const routes: Routes = [{path: '.', component: HomeComponent, canActivate: [AuthGuard]}, {path: 'login', component: LoginComponent},
+const routes: Routes = [{path: '.', component: HomeComponent}, 
+  {path: 'login', component: LoginComponent},
   {path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
   {path: 'register', component: RegisterComponent},
   {path: 'requestReservation', component: RequestReservationComponent},

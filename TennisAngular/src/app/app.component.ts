@@ -29,6 +29,10 @@ export class AppComponent {
     this.router.navigate(['/admin']);
   }
 
+  login() {
+    this.router.navigate(['/login']);
+  }
+
   get isAdmin() {
     // tslint:disable-next-line:max-line-length
     // In a later version of this code. We will define a class Member and have that encompass both the username and role. For now we will just hardcode it.
@@ -36,18 +40,24 @@ export class AppComponent {
   }
 
   get isMember() {
-
     return this.currentMember && this.currentMember.role === Role.member;
   }
 
   get isLoggedIn() {
-
     return this.isAdmin || this.isMember;
+  }
+
+  get showLogout() {
+    return this.isAdmin || this.isMember && this.router.url === '/.';
+  }
+
+  get showLogin() {
+    return !this.isAdmin && !this.isMember && this.router.url === '/.';
   }
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
   admin() {
     this.router.navigate(['/admin']);
