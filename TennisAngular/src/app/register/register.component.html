@@ -53,6 +53,76 @@
       </div>
 
       <div class="form-group">
+        <mat-form-field>
+          <input matInput placeholder="Phone Number" type="tel" formControlName="phone" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }">
+          <mat-hint *ngIf="submitted && f.phone.errors" >
+            <mat-hint *ngIf="f.phone.errors.required">Phone Number is required</mat-hint>
+            <mat-hint *ngIf="f.phone.errors.pattern">Phone Number is typed with errors.</mat-hint>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <h2></h2>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field>
+          <input matInput placeholder="Address" type="text" formControlName="address" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.address.errors }">
+          <mat-hint *ngIf="submitted && f.address.errors" >
+            <mat-hint *ngIf="f.address.errors.required">Address is required</mat-hint>
+            <mat-hint *ngIf="f.address.errors.pattern">Address is typed with errors.</mat-hint>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <h2></h2>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field>
+          <input matInput placeholder="Racket Tension (lb)" type="text" formControlName="racketTension" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.racketTension.errors }">
+          <mat-hint *ngIf="submitted && f.racketTension.errors" >
+            <mat-hint *ngIf="f.racketTension.errors.required">Racket Tension is required</mat-hint>
+            <mat-hint *ngIf="f.racketTension.errors.pattern">Racket Tension is typed with errors.</mat-hint>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <h2></h2>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field>
+          <input matInput placeholder="Racket Type" type="text" formControlName="racketType" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.racketType.errors }">
+          <mat-hint *ngIf="submitted && f.racketType.errors" >
+            <mat-hint *ngIf="f.racketType.errors.required">Racket Type is required</mat-hint>
+            <mat-hint *ngIf="f.racketType.errors.pattern">Racket Type is typed with errors.</mat-hint>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <h2></h2>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field>
+          <input matInput placeholder="Racket Strings" type="text" formControlName="racketStrings" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.racketStrings.errors }">
+          <mat-hint *ngIf="submitted && f.racketStrings.errors" >
+            <mat-hint *ngIf="f.racketStrings.errors.required">Racket Strings is required</mat-hint>
+            <mat-hint *ngIf="f.racketStrings.errors.pattern">Racket Strings is typed with errors.</mat-hint>
+          </mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <h2></h2>
+      </div>
+
+      <div class="form-group">
 
         <mat-form-field>
           <input matInput placeholder="Username" type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }">

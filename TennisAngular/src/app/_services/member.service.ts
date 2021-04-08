@@ -19,7 +19,6 @@ export class MemberService {
     return this.http.get<Member[]>(`http://localhost:3030/member/allmembers`);
   }
 
-
   register(member: Member) {
     return this.http.post(`http://localhost:3030/member/register`, member);
   }

@@ -35,6 +35,7 @@ export class RegisterComponent implements OnInit {
       this.router.navigate(['/']);
     }
   }
+  //5404492602
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -42,6 +43,11 @@ export class RegisterComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]+$')]],
       lastName: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]+$')]],
       email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]+$'), Validators.minLength(10), Validators.maxLength(10)]],
+      address: ['', [Validators.required]],
+      racketTension: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      racketType: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')]],
+      racketStrings: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')]],
       username: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]+$')]],
       password: ['', [Validators.required, Validators.minLength(6)]]
 
