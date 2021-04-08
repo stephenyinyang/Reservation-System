@@ -8,7 +8,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const router = express.Router();
 
-// Our JWT logic. Uses express-jwt which is a middleware that validates JsonWebTokens and sets req.member.
+// Our JWT logic. Uses express-jwt which is a middleware that validates JsonWebTokens and sets req.user.
 const jwt = require('./_helpers/jwt');
 
 

@@ -16,4 +16,4 @@ const schema = new Schema({
 
 schema.set('toJSON', { virtuals: true });
 
-module.exports = mongoose.model('Members', schema);
+module.exports = mongoose.model('Member', schema);

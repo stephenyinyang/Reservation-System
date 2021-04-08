@@ -38,7 +38,6 @@ async function getMemberReservations(username) {
 
 async function deleteReservation(date, endDate, username, court) {
   endDate = endDate.trim();
-
   if (await Reservation.findOne({ createdBy: username, start: date, court: court})) {
     let day = new Date(date);
     let dayStart = new Date(endDate);
@@ -52,32 +51,39 @@ async function deleteReservation(date, endDate, username, court) {
       let length = new Date(endDate) - start;
       let numIntervals = Math.floor(length / 1800000);
       let i = (start - dayStart);
-
       let offset = i/1800000;
-      console.log(length);
-      console.log(i / 1800000);
-      console.log(numIntervals);
       let courtNum = parseInt(court);
-      console.log(typeof courtNum);
-      console.log(courtNum);
-
       for (i = i / 1800000; i < numIntervals + offset; i++) {
 
         avail.times[i].push(courtNum);
-        avail.times[i][avail.times[i].length - 1]= avail.times[i][avail.times[i].length - 1][0];
+        //avail.times[i][avail.times[i].length - 1]= avail.times[i][avail.times[i].length - 1][0];
 
-        //console.log(avail.times[i]);
         avail.times[i].sort();
 
-        //console.log(avail.times[i]);
       }
-      await AvailableTimes.updateOne({day: avail.day}, {$set: {times: avail.times}});
+      console.log(avail.times);
+      let del = true;
+      for(var j = 0; j < 29; j++) 
+      {
+        if (avail.times[j].length != 6) {
+          del = false;
+        }
+      }
+      if (del) {
+        if(await AvailableTimes.findOne({day: avail.day})) {
+          return await AvailableTimes.deleteOne({day: avail.day});
+        }
+      }
+      else {
+        await AvailableTimes.updateOne({day: avail.day}, {$set: {times: avail.times}});
+      }
     }).catch(err => {throw err;});
 
     await Reservation.deleteOne({ createdBy: username, start: date, court: court });
 
   }
   else if (!(await Reservation.findOne({ createdBy: username, start: date, court: court }))){
+    console.log("in deleteReservation");
     throw 'Deleted: 0';
   }
 }
@@ -158,7 +164,6 @@ async function addReservation(parecord, username) {
   dbrecord = new Reservation(newrecord);
 
   await dbrecord.save();
-
 }
 
 async function confirmReservation(reservation) {
@@ -183,8 +188,10 @@ async function unconfirmReservation(reservation) {
 }
 
 async function getAvailableTimes(date) {
+  
   if(!(await AvailableTimes.findOne({day: date})))
   {
+    console.log(date);
     let newDay = {};
     newDay.day = date;
     let arrayTimes = [];
@@ -209,12 +216,12 @@ async function getAllAvailDates()
 
 async function deleteDate(date)
 {
-  console.log(date);
   if(await AvailableTimes.findOne({day: date})) {
     return await AvailableTimes.deleteOne({day: date});
   }
   else
   {
+    console.log("in deleteDate");
     throw 'Deleted: 0';
   }
 }

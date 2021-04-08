@@ -42,10 +42,9 @@ function getGoals(req, res, next) {
 
 // set goals (calorie goal and minute goal) for a member. Hint: write a middleware function and add it to the module exports.
 function setGoals(req, res, next) {
-    memberService.setGoals(req.body, req.member.sub).then(() => res.json({})).catch(err => next(err));
+    memberService.setGoals(req.body, req.user.sub).then(() => res.json({})).catch(err => next(err));
 }
 
 function deleteMember(req, res, next) {
   memberService.deleteMember(req.params.username).then(() => res.json("Deleted: 1")).catch(err => next(err));
 }
-// req.member.username

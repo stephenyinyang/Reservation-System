@@ -22,7 +22,7 @@ function createReservation(req, res, next) {
 
   // add a reservation and respond to the client confirming that the reservation was successfully added.
   //console.log("YEasdfasdfET");
-  reservationService.addReservation(req.body, req.member.sub).then(() => res.json("Recorded!"))
+  reservationService.addReservation(req.body, req.user.sub).then(() => res.json("Recorded!"))
     .catch(err => res.json(err));
 }
 
@@ -50,22 +50,22 @@ function getMemberReservations(req,res,next){
       .catch(err => next(err));
 
    */
-  reservationService.getMemberReservations(req.member.sub).then((records) => res.json(records))
+  reservationService.getMemberReservations(req.user.sub).then((records) => res.json(records))
     .catch(err => res.json(err));
 }
 
 function deleteReservation(req,res,next) {
 
-// delete parecord from the database and respond to the client by conforming the action. //req.member.username
+// delete parecord from the database and respond to the client by conforming the action.
 
-  reservationService.deleteReservation(req.params.date, req.params.end, req.member.sub, req.params.court).then(() => res.json("Deleted: 1"))
+  reservationService.deleteReservation(req.params.date, req.params.end, req.user.sub, req.params.court).then(() => res.json("Deleted: 1"))
     .catch(err => res.json(err))
 
 }
 
 function deleteReservationAdmin(req, res, next)
 {
-  memberService.getByMembername(req.params.username).then((username) => {
+  memberService.getByUsername(req.params.username).then((username) => {
     reservationService.deleteReservation(req.params.date, req.params.end, username, req.params.court).then(() => res.json("Deleted: 1"))
       .catch(err => res.json(err))
   })

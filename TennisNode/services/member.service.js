@@ -2,95 +2,95 @@ const config = require('../config.json');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('../_helpers/database');
-const User = db.User;
+const Member = db.Members;
 
 
 
 module.exports = {
     authenticate,
-    getAllUsers,
+    getAllMembers,
     getByUsername,
-    addUser,
+    addMember,
     //setGoals,
     //getGoals,
-    deleteUser
+    deleteMember
 }
 
 async function authenticate({ username, password }) {
 
-    const user = await User.findOne({ username });
-    if (user && bcrypt.compareSync(password, user.hash)) {
-        const { hash, ...userWithoutHash } = user.toObject();
-        const token = jwt.sign({ sub: user.id, role: user.role }, config.secret);
+    const member = await Member.findOne({ username });
+    if (member && bcrypt.compareSync(password, member.hash)) {
+        const { hash, ...memberWithoutHash } = member.toObject();
+        const token = jwt.sign({ sub: member.id, role: member.role }, config.secret);
         return {
-            ...userWithoutHash,
+            ...memberWithoutHash,
             token
         };
     }
 }
 
-async function getAllUsers() {
+async function getAllMembers() {
     //Returning the result of the promise.
-    return await User.find().select('-hash');
+    return await Member.find().select('-hash');
 }
 
 
 
 async function getByUsername(username) {
 
-    return await User.find({username:username});
+    return await Member.find({username:username});
 }
 
-async function addUser(userParam) {
+async function addMember(memberParam) {
 
     // validate
-    if (await User.findOne({ username: userParam.username })) {
-        throw 'Username "' + userParam.username + '" is already taken';
+    if (await Member.findOne({ username: memberParam.username })) {
+        throw 'Username "' + memberParam.username + '" is already taken';
     }
-    else  if (await User.findOne({ email: userParam.email })) {
-        throw 'Email "' + userParam.email + '" is already taken';
+    else  if (await Member.findOne({ email: memberParam.email })) {
+        throw 'Email "' + memberParam.email + '" is already taken';
     }
 
-    const user = new User(userParam);
+    const member = new Member(memberParam);
 
     // hash password
-    if (userParam.password) {
-        user.hash = bcrypt.hashSync(userParam.password, 10);
+    if (memberParam.password) {
+        member.hash = bcrypt.hashSync(memberParam.password, 10);
     }
 
-    // save user
-    await user.save();
+    // save member
+    await member.save();
 
 }
 
 
-//  complete this function. It takes in calories and minute goal values in 'values' and saves it for a given userid (_id). Hint: use 'updateOne' from mongoose.
-/*async function setGoals(values, userid) {
-    if (await User.findOne({_id: userid})) {
-        await User.updateOne({_id: userid}, {$set: {caloriegoal: values.caloriegoal, minutegoal: values.minutegoal}})
+//  complete this function. It takes in calories and minute goal values in 'values' and saves it for a given memberid (_id). Hint: use 'updateOne' from mongoose.
+/*async function setGoals(values, memberid) {
+    if (await Member.findOne({_id: memberid})) {
+        await Member.updateOne({_id: memberid}, {$set: {caloriegoal: values.caloriegoal, minutegoal: values.minutegoal}})
     }
     else {
-        throw 'User ID not found'
+        throw 'Member ID not found'
     }
 }
 
 
-//  complete this function. It should return calorie and minute goals for a given user.
+//  complete this function. It should return calorie and minute goals for a given member.
 async function getGoals(username) {
-        if (await User.findOne({ username: username })) {
-            return await User.findOne({username:username}, 'caloriegoal minutegoal');
+        if (await Member.findOne({ username: username })) {
+            return await Member.findOne({username:username}, 'caloriegoal minutegoal');
         }
         else {
-            throw 'User not found';
+            throw 'Member not found';
         }
 }*/
 
-async function deleteUser(username)
+async function deleteMember(username)
 {
-  if (await User.findOne({ username: username})) {
-    await User.deleteOne({ username: username});
+  if (await Member.findOne({ username: username})) {
+    await Member.deleteOne({ username: username});
   }
-  else if (!(await User.findOne({ username: username}))){
+  else if (!(await Member.findOne({ username: username}))){
     throw 'Deleted: 0';
   }
 }
