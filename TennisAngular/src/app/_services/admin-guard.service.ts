@@ -10,7 +10,10 @@ export class AdminGuard implements CanActivate{
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
     const currentMember = this.auth.currentMemberValue;
-
+    if (currentMember === null) {
+      this.router.navigate(['/']);
+      return false;
+    }
     if (currentMember.role === 'Admin') {
       return true;
     }

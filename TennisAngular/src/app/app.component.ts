@@ -34,8 +34,6 @@ export class AppComponent {
   }
 
   get isAdmin() {
-    // tslint:disable-next-line:max-line-length
-    // In a later version of this code. We will define a class Member and have that encompass both the username and role. For now we will just hardcode it.
     return this.currentMember && this.currentMember.role === Role.admin;
   }
 
@@ -57,6 +55,7 @@ export class AppComponent {
 
   logout() {
     this.authService.logout();
+    this.notifService.showNotif('Logged out!', 'dismiss');
     this.router.navigate(['/']);
   }
   admin() {

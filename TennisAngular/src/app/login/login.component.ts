@@ -29,10 +29,6 @@ export class LoginComponent {
     }
   }
 
-
-
-
-
   login() {
     this.submitted = true;
     this.loading = true;
@@ -41,9 +37,7 @@ export class LoginComponent {
       .subscribe(
         data => {
           this.router.navigate(['']);
-
-          // this.notif.showNotif(data, 'confirmation');
-          this.notif.showNotif('Successfully logged in!', 'confirmation');
+          this.notif.showNotif('Logged in!', 'dismiss');
         },
         error => {
           this.error = error;

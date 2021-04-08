@@ -1,9 +1,12 @@
 import {Component, NgModule, OnDestroy, OnInit} from '@angular/core';
 import {NotificationService} from '../_services/notification.service';
+import {AuthService} from '../_services/auth.service';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ReservationService} from '../_services/reservation.service';
 import {Reservations} from '../_models/Reservations';
+import {Member} from '../_models/member';
+import {Role} from '../_models/role';
 
 @Component({ templateUrl: 'home.component.html' ,
 
@@ -15,8 +18,12 @@ export class HomeComponent implements OnInit {
     private notifService: NotificationService,
     private route: ActivatedRoute,
     private router: Router,
-    private reservationService: ReservationService
-  ) {}
+    private reservationService: ReservationService,
+    private authService: AuthService,
+  ) {
+    this.authService.currentMember.subscribe(x => this.currentMember = x);
+  }
+  currentMember: Member;
   request: boolean;
   reservations: Reservations[] = [];
   createdDate: Date;
@@ -154,6 +161,18 @@ export class HomeComponent implements OnInit {
     return this.request;
   }
 
+  isAdmin() {
+    return this.currentMember && this.currentMember.role === Role.admin;
+  }
+
+  isMember() {
+    return this.currentMember && this.currentMember.role === Role.member;
+  }
+
+  isLoggedIn() {
+    return this.isAdmin() || this.isMember();
+  }
+
 
     changedDate(event: MatDatepickerInputEvent<Date>) {
       this.createdDate = event.value;
@@ -161,12 +180,17 @@ export class HomeComponent implements OnInit {
     }
 
     edit(cell: string, index: number, timeIndex: number) {
-      if ( document.getElementById(String(timeIndex) + String(index)).className === 'pending' ||
-        document.getElementById(String(timeIndex) + String(index)).className === 'confirmed') {
-        this.notifService.showNotif('This Time is Unavailable!');
-      } else {
-        this.request = true;
-        this.router.navigate(['/requestReservation', {start: cell, time: timeIndex, day: this.createdDate, court: index}]);
+      if (this.isLoggedIn()) {
+        if ( document.getElementById(String(timeIndex) + String(index)).className === 'pending' ||
+          document.getElementById(String(timeIndex) + String(index)).className === 'confirmed') {
+          this.notifService.showNotif('This Time is Unavailable!');
+        } else {
+          this.request = true;
+          this.router.navigate(['/requestReservation', {start: cell, time: timeIndex, day: this.createdDate, court: index}]);
+        }
+      }
+      else {
+        this.notifService.showNotif('Must be a member to reserve online!', 'dismiss');
       }
     }
 

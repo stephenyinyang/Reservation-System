@@ -13,7 +13,7 @@ const routes: Routes = [{path: '.', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
   {path: 'register', component: RegisterComponent},
-  {path: 'requestReservation', component: RequestReservationComponent},
+  {path: 'requestReservation', component: RequestReservationComponent, canActivate: [AuthGuard]},
   {path: 'myReservations', component: MemberviewComponent, canActivate: [AuthGuard]},
   {path: '**', redirectTo: '.'}];
 
