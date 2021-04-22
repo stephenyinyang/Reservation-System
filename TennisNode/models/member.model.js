@@ -7,7 +7,7 @@ const schema = new Schema({
         username: { type: String, unique: true, required: true },
         email: { type: String, unique: true, required: true },
         phone: { type: String, unique: true, required: true },
-        address: { type: String, unique: true, required: true },
+        address: { type: String, required: true },
         racketTension: { type: Number, required: true },
         racketType: { type: String, required: true },
         racketStrings: { type: String, required: true },

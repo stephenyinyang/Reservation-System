@@ -46,7 +46,7 @@ export class AppComponent {
   }
 
   get showLogout() {
-    return this.isAdmin || this.isMember && this.router.url === '/.';
+    return (this.isAdmin || this.isMember);
   }
 
   get showLogin() {
