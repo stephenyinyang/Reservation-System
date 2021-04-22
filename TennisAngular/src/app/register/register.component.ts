@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -6,7 +6,8 @@ import { first } from 'rxjs/operators';
 import { NotificationService } from '../_services/notification.service';
 import { MemberService } from '../_services/member.service';
 import { AuthService } from '../_services/auth.service';
-
+import { async } from '@angular/core/testing';
+declare var paypal;  
 @Component({templateUrl: 'register.component.html',
 
   styleUrls: ['register.component.css']
@@ -16,11 +17,18 @@ import { AuthService } from '../_services/auth.service';
 
 
 export class RegisterComponent implements OnInit {
+  @ViewChild('paypal', {static: true}) paypalElement: ElementRef;  
   registerForm: FormGroup;
   loading = false;
   submitted = false;
   roles = [];
 
+  product = {
+    price: 0.01,
+    description: "Standard Membership"
+  };
+
+  paidFor = false;
 
   constructor(
     // private patternValidator: PatternValidator,
@@ -55,13 +63,44 @@ export class RegisterComponent implements OnInit {
 
     this.roles = [{name: 'Member'},
       {name: 'Admin'}];
-  }
 
+    paypal
+      .Buttons({
+        createOrder: (data, actions) => {
+          return actions.order.create({
+            purchase_units: [
+              {
+                description: this.product.description,
+                amount: {
+                  currency_code: 'USD',
+                  value: this.product.price
+                }
+              }
+            ]
+          });
+        },
+        onApprove: async (data, actions) => {
+          const order = await actions.order.capture();
+          this.paidFor = true;
+          document.getElementById('pay').style.display='none';
+          console.log(order);
+        },
+        onError: err => {
+          console.log(err);
+        }
+      })
+      .render(this.paypalElement.nativeElement);
+  }
+ 
   // convenience getter for easy access to form fields
   get f() {
     return this.registerForm.controls; }
 
   onSubmit() {
+    if (!this.paidFor) {
+      this.notification.showNotif("Must pay to register", "dismiss");
+      return;
+    }
     this.submitted = true;
     // stop here if form is invalid
     if (this.registerForm.invalid) {

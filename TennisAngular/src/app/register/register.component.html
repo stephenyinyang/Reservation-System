@@ -160,10 +160,15 @@
         </mat-form-field>
       </div>
 
+    <div *ngIf="!paidFor">
+      <h3>Standard Membership - ${{ product.price }}</h3>
+    </div>
+    <div *ngIf="paidFor">
+      <h3>Successfully purchased membership</h3>
+    </div>
 
-
-
-
+    <div #paypal id="pay"></div>
+    
     </mat-card-content>
     <mat-card-actions>
       <button mat-button [disabled]="loading" >Register</button>
