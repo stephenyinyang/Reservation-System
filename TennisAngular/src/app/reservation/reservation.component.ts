@@ -8,6 +8,8 @@ import {Role} from '../_models/role';
 import {Router} from '@angular/router';
 import {AuthService} from '../_services/auth.service';
 import {first} from 'rxjs/operators';
+import emailjs, { EmailJSResponseStatus } from 'emailjs-com';
+
 
 
 @Component({
@@ -49,6 +51,22 @@ export class ReservationComponent implements OnInit {
         resp => {
           this.confirmEvent.emit();
           this.notifService.showNotif(resp, 'response');
+          let start = new Date(this.reservationRecord.start);
+          let end = new Date(this.reservationRecord.end);
+          var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          var templateParams = {
+            to_name: this.reservationRecord.createdBy.firstName,
+            to_email: this.reservationRecord.createdBy.email,
+            day: start.toLocaleDateString('en-US', options),
+            start_time: start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+            end_time: end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+          };
+            emailjs.send('service_yuv1ddd', 'template_qw699dx', templateParams, 'user_u0ANlqs4HsAUJCAkDH8R1')
+              .then((result: EmailJSResponseStatus) => {
+                console.log(result.text);
+              }, (error) => {
+                console.log(error.text);
+              });
         },
         error => {
           this.notifService.showNotif(error);

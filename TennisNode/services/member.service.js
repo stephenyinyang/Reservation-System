@@ -57,6 +57,32 @@ async function addMember(memberParam) {
     if (memberParam.password) {
         member.hash = bcrypt.hashSync(memberParam.password, 10);
     }
+    var email  = require('emailjs/email');
+
+    var server  = email.server.connect({
+        user:    "stephenyang64@gmail.com",
+        password:"stephenyinyang@vt.edu",
+        host:    "smtp.your-email.com",
+        ssl:     true,
+        port: 465
+    });
+
+    server.send({
+        text:    "Your message body text",
+        from:    "stephenyang64@gmail.com",
+        to:      "stephenyinyang@vt.edu",
+        subject: "Your message subject",
+        attachment:
+        [
+           {data:"<html><strong>A bit of HTML text</strong></html>", alternative:true},
+           {path:"user/desktop/file.pdf", type:"application/pdf", name:"renamed.pdf"}
+        ]
+     }, function(err, message) {
+         if(err)
+         console.log(err);
+         else
+         res.json({success: true, msg: 'sent'});
+      });
 
     // save member
     await member.save();

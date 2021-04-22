@@ -3,6 +3,7 @@ const Reservation = db.Reservations;
 const AvailableTimes = db.AvailableTimes;
 
 
+
 module.exports = {
   getConfirmedReservations,
   getUnconfirmedReservations,
@@ -177,6 +178,7 @@ async function confirmReservation(reservation) {
 }
 
 async function unconfirmReservation(reservation) {
+
 
   if (await Reservation.findOne({start: reservation.start, court: reservation.court, _id: reservation._id})) {
     await Reservation.updateOne({start: reservation.start, court: reservation.court, _id: reservation._id},
