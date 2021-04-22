@@ -5,6 +5,8 @@ import {ReservationService} from '../_services/reservation.service';
 import {first} from 'rxjs/operators';
 import {NotificationService} from '../_services/notification.service';
 import { AuthService } from '../_services/auth.service';
+import {Member} from '../_models/member';
+import {Role} from '../_models/role';
 
 @Component({
   selector: 'request-reservation',
@@ -22,6 +24,7 @@ export class RequestReservationComponent implements OnInit {
   start: Date;
   end: Date;
   confirmed: boolean;
+  currentMember: Member;
 
   // reservedBy: User;
   // court: number;
@@ -31,7 +34,9 @@ export class RequestReservationComponent implements OnInit {
               private reservationService: ReservationService,
               private notification: NotificationService,
               private auth: AuthService
-  ) {}
+  ) {
+    this.auth.currentMember.subscribe(x => this.currentMember = x);
+  }
 
 
   ngOnInit() {
@@ -76,7 +81,14 @@ export class RequestReservationComponent implements OnInit {
       } else {
         this.requestForm.value.court = 6;
       }
-      this.requestForm.value.confirmed = false;
+      // if user is admin, then automatically confirm reservation
+      if (this.isAdmin()) {
+        this.requestForm.value.confirmed = true;
+      }
+      // else, request reservation as unconfirmed
+      else {
+        this.requestForm.value.confirmed = false;
+      }
       delete this.requestForm.value.hours;
       this.reservationService.add(this.requestForm.value)
         .pipe(first())
@@ -95,6 +107,9 @@ export class RequestReservationComponent implements OnInit {
   }
   cancel() {
     this.router.navigate(['/']);
+  }
+  isAdmin() {
+    return this.currentMember && this.currentMember.role === Role.admin;
   }
 
 }

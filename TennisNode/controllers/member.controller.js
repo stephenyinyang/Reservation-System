@@ -14,7 +14,7 @@ module.exports = {
 function authenticate(req, res, next) {
     console.log("Authenticate():", req.body);
        memberService.authenticate(req.body)
-        .then(member => member ? res.json(member) : res.status(400).json({ message: 'username or password is incorrect' }))
+        .then(member => member ? res.json(member) : res.status(400).json({ message: 'Username or password is incorrect' }))
         .catch(err => next(err));
 }
 
