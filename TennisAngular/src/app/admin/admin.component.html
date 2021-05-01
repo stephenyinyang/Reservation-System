@@ -1,21 +1,25 @@
 <h1 style="text-align:center">Admin Page</h1>
-<p style="text-align:center"> Unconfirmed Reservations:</p>
+<mat-select class="sel" placeholder="Select List" [(ngModel)]="selectedList">
+  <mat-option [value]="list.name" *ngFor="let list of lists;">{{list.name}}</mat-option>
+</mat-select>
+<div *ngIf="selectedList == 'Unconfirmed Reservations'">
+  <mat-select class="sel" placeholder="Sort By" [(ngModel)]="sortBy">
+    <mat-option [value]="sort.name" *ngFor="let sort of sorts;">{{sort.name}}</mat-option>
+  </mat-select>
+  <mat-list dense>
+    <reservation-component *ngFor="let reservationRecord of unconfirmedRecords" [reservationRecord]="reservationRecord"
+                          (confirmEvent) = "confirm()"></reservation-component>
+  </mat-list>
+</div>
 
-<mat-list dense>
-  <reservation-component *ngFor="let reservationRecord of unconfirmedRecords" [reservationRecord]="reservationRecord"
-                         (confirmEvent) = "confirm()"></reservation-component>
-</mat-list>
-<br>
-
-<p style="text-align:center">Confirmed Reservations:</p>
-
+<div *ngIf="selectedList == 'Confirmed Reservations'">
 <mat-list dense>
   <reservation-component *ngFor="let reservationRecord of confirmedRecords" [reservationRecord]="reservationRecord"
                          (confirmEvent) = "confirm()"></reservation-component>
 </mat-list>
-<br>
-<p style="text-align:center">All Members:</p>
+</div>
 
+<div *ngIf="selectedList == 'All Members'">
 <mat-list dense>
   <mat-list-item *ngFor="let member of members">
      <p mat-line>{{member.firstName}} {{member.lastName}}</p>
@@ -49,6 +53,7 @@
      <mat-divider [inset]="true" ></mat-divider>
   </mat-list-item>
 </mat-list>
+</div>
 
 <!-- <div>
   All members from secure (admin only) api end point:

@@ -12,6 +12,10 @@ import {ReservationService} from '../_services/reservation.service';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
+  sorts = [];
+  lists = [];
+  sortBy: String;
+  selectedList: String;
   members: Member[] = [];
   unconfirmedRecords: Reservations[] = [];
   confirmedRecords: Reservations[] = [];
@@ -26,7 +30,12 @@ export class AdminComponent implements OnInit {
     this.memberService.getAll().pipe(first()).subscribe(members => {
       this.members = members;
     });
-
+    this.lists = [{name: 'Unconfirmed Reservations'},
+      {name: 'Confirmed Reservations'}, {name: 'All Members'}];
+    this.selectedList = "Unconfirmed Reservations";
+    this.sorts = [{name: 'Most Recent'},
+      {name: 'By Date'}, {name: 'By Name'}];
+    this.sortBy = "Most Recent"
   }
 
   confirm() {
