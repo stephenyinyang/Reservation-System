@@ -23,6 +23,10 @@ export class MemberService {
     return this.http.post(`http://localhost:3030/member/register`, member);
   }
 
+  renew(member: Member) {
+    return this.http.post(`http://localhost:3030/member/renew`, member);
+  }
+
   getMyReservations(member: Member): Observable<Member> {
     return this.http.get<Member>(`http://localhost:3030/reservation/getMyReservations`);
   }

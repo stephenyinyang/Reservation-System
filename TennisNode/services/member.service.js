@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('../_helpers/database');
 const Member = db.Members;
-
+const schedule = require('node-schedule');
+const nodemailer = require('nodemailer');
 
 
 module.exports = {
@@ -42,6 +43,38 @@ async function getByUsername(username) {
 }
 
 async function addMember(memberParam) {
+    var nextYear = new Date();
+    nextYear.setMinutes(nextYear.getMinutes() + 1);
+
+    var j = schedule.scheduleJob(nextYear, function(){
+        var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'vttenniscenter@gmail.com',
+            pass: 'tenniscenter1'
+        }
+        });
+        
+        var mailOptions = {
+        from: 'vttenniscenter@gmail.com',
+        to: memberParam.email,
+        subject: 'Please Renew Your VT Tennis Center Membership',
+        text: 'Hello ' + memberParam.firstName + ',\n\n' +
+        'We would like to notify you that your membership at the Burrows-Burleson Tennis Center' +
+        ' has expired. Please renew your membership. Please call to let us know if you have any questions.\n\n' +
+        'Best wishes,\nJohn Pretz'
+        };
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+    });
+
+    j.cancelNext(false);
+    
 
     // validate
     if (await Member.findOne({ username: memberParam.username })) {

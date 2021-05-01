@@ -1,6 +1,7 @@
 const db = require('../_helpers/database');
 const Reservation = db.Reservations;
 const AvailableTimes = db.AvailableTimes;
+const nodemailer = require('nodemailer');
 
 
 
@@ -168,6 +169,36 @@ async function addReservation(parecord, username) {
 }
 
 async function confirmReservation(reservation) {
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'vttenniscenter@gmail.com',
+      pass: 'tenniscenter1'
+    }
+  });
+
+  var start = new Date(reservation.start);
+  var end = new Date(reservation.end);
+  
+  var mailOptions = {
+    from: 'vttenniscenter@gmail.com',
+    to: reservation.createdBy.email,
+    subject: 'Your Reservation On ' + start.toDateString() + ' Has Been Confirmed',
+    text: 'Hello ' + reservation.createdBy.firstName + ',\n\n' +
+    'We would like to notify you that your reservation on ' + start.toDateString() + 
+    ' starting at ' + formatAMPM(start) + ' and ending at ' + formatAMPM(end) + 
+    ' has been Confirmed. Please call to let us know if you have any questions.\n\n' +
+    'Best wishes,\nJohn Pretz'
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+
   if (await Reservation.findOne({start: reservation.start, court: reservation.court, _id: reservation._id})) {
     await Reservation.updateOne({start: reservation.start, court: reservation.court, _id: reservation._id},
       {$set: {confirmed: true}});
@@ -177,8 +208,47 @@ async function confirmReservation(reservation) {
   }
 }
 
-async function unconfirmReservation(reservation) {
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
 
+async function unconfirmReservation(reservation) {
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'vttenniscenter@gmail.com',
+      pass: 'tenniscenter1'
+    }
+  });
+
+  var start = new Date(reservation.start);
+  var end = new Date(reservation.end);
+  
+  var mailOptions = {
+    from: 'vttenniscenter@gmail.com',
+    to: reservation.createdBy.email,
+    subject: 'Your Reservation On ' + start.toDateString() + ' Has Been Unconfirmed',
+    text: 'Hello ' + reservation.createdBy.firstName + ',\n\n' +
+    'We would like to notify you that your reservation on ' + start.toDateString() + 
+    ' starting at ' + formatAMPM(start) + ' and ending at ' + formatAMPM(end) + 
+    ' has been unconfirmed. Please call to let us know if you have any questions.\n\n' +
+    'Best wishes,\nJohn Pretz'
+  };
+  
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
 
   if (await Reservation.findOne({start: reservation.start, court: reservation.court, _id: reservation._id})) {
     await Reservation.updateOne({start: reservation.start, court: reservation.court, _id: reservation._id},
