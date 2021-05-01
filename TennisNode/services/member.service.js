@@ -14,7 +14,8 @@ module.exports = {
     addMember,
     //setGoals,
     //getGoals,
-    deleteMember
+    deleteMember,
+    renew
 }
 
 async function authenticate({ username, password }) {
@@ -38,15 +39,18 @@ async function getAllMembers() {
 
 
 async function getByUsername(username) {
-
     return await Member.find({username:username});
+}
+
+async function renew(memberParam) {
+    return await Member.updateOne({username: memberParam.username}, {$set: {isMember: true, lastMembershipRenewal: Date.now}});
 }
 
 async function addMember(memberParam) {
     var nextYear = new Date();
-    nextYear.setMinutes(nextYear.getMinutes() + 1);
+    nextYear.setFullYear(nextYear.getFullYear() + 1);
 
-    var j = schedule.scheduleJob(nextYear, function(){
+    var j = schedule.scheduleJob(nextYear, async function(){
         var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -71,10 +75,8 @@ async function addMember(memberParam) {
                 console.log('Email sent: ' + info.response);
             }
         });
+        await Member.updateOne({username: memberParam.username}, {$set: {isMember: false}});
     });
-
-    j.cancelNext(false);
-    
 
     // validate
     if (await Member.findOne({ username: memberParam.username })) {

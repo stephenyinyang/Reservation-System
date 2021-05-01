@@ -2,11 +2,11 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
+import {Member} from '../_models/member';
 
 import { NotificationService } from '../_services/notification.service';
 import { MemberService } from '../_services/member.service';
 import { AuthService } from '../_services/auth.service';
-import { async } from '@angular/core/testing';
 declare var paypal;  
 @Component({templateUrl: 'renew.component.html',
 
@@ -22,6 +22,7 @@ export class RenewComponent implements OnInit {
   loading = false;
   submitted = false;
   roles = [];
+  currentMember: Member;
 
   product = {
     price: 0.01,
@@ -31,39 +32,15 @@ export class RenewComponent implements OnInit {
   paidFor = false;
 
   constructor(
-    // private patternValidator: PatternValidator,
-    private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService,
     private memberService: MemberService,
     private notification: NotificationService
   ) {
-    // redirect to home if already logged in
-    if (this.authService.currentMemberValue) {
-      this.router.navigate(['/']);
-    }
+    this.authService.currentMember.subscribe(x => this.currentMember = x);
   }
-  //5404492602
 
   ngOnInit() {
-    this.renewForm = this.formBuilder.group({
-      role: [''],
-      firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]+$')]],
-      lastName: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]+$')]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]+$'), Validators.minLength(10), Validators.maxLength(10)]],
-      address: ['', [Validators.required]],
-      racketTension: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      racketType: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')]],
-      racketStrings: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')]],
-      username: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]+$')]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-
-    });
-
-    this.roles = [{name: 'Member'},
-      {name: 'Admin'}];
-
     paypal
       .Buttons({
         createOrder: (data, actions) => {
@@ -109,12 +86,11 @@ export class RenewComponent implements OnInit {
     }
 
     this.loading = true;
-    this.memberService.renew(this.renewForm.value)
+    this.memberService.renew(this.currentMember)
       .pipe(first())
       .subscribe(
         data => {
-          //  this.alertService.success('Registration successful', true);
-          this.router.navigate(['/login']);
+          this.router.navigate(['/']);
         },
         error => {
           console.log('Error:', error);

@@ -7,7 +7,8 @@ module.exports = {
     register,
     setGoals,
     getGoals,
-    deleteMember
+    deleteMember,
+    renew
 };
 
 
@@ -26,11 +27,16 @@ function getAllMembers(req, res, next) {
 }
 
 function register(req, res, next) {
-
    memberService.addMember(req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
 }
+
+function renew(req, res, next) {
+    memberService.renew(req.body)
+         .then(() => res.json({}))
+         .catch(err => next(err));
+ }
 
 
 

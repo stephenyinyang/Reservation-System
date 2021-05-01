@@ -12,5 +12,7 @@ export class Member {
   role: Role;
   email: string;
   token?: string;
+  lastMembershipRenewal: Date;
+  isMember: boolean;
 }
 

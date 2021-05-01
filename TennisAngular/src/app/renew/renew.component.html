@@ -1,35 +1,29 @@
-<h1>Admin</h1>
-<p>This page can only be accessed by administrators.</p>
-<p>Unconfirmed Reservations:</p>
+<form (ngSubmit)="onSubmit()">
+  <mat-card>
+    <mat-card-header>
 
-<div class="pa-record-container">
+      <mat-card-title>Membership Renewal</mat-card-title>
 
-  <reservation-component class="card-item" *ngFor="let reservationRecord of unconfirmedRecords" [reservationRecord]="reservationRecord"
-                         (confirmEvent) = "confirm()"></reservation-component>
+    </mat-card-header>
 
-  <!--<div *ngFor="let parecord of parecords">{{parecord}}</div>-->
+    <mat-card-content>
+    <div *ngIf="!paidFor">
+      <h3>Standard Membership - ${{ product.price }}</h3>
+    </div>
+    <div *ngIf="paidFor">
+      <h3>Successfully purchased membership</h3>
+    </div>
 
-</div>
+    <div #paypal id="pay"></div>
+    
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button [disabled]="loading" >Renew</button>
+      <!--      <img class="pl-3" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />-->
+      <button mat-button  routerLink="/login" >Cancel</button>
+      <mat-spinner  *ngIf="loading" [diameter]="30"></mat-spinner>
+    </mat-card-actions>
+  </mat-card>
 
-<br>
-
-<p>Confirmed Reservations:</p>
-
-<div class="pa-record-container">
-
-  <reservation-component class="card-item" *ngFor="let reservationRecord of confirmedRecords" [reservationRecord]="reservationRecord"
-                         (confirmEvent) = "confirm()"></reservation-component>
-
-  <!--<div *ngFor="let parecord of parecords">{{parecord}}</div>-->
-
-</div>
-
-<br>
-
-<div>
-  All members from secure (admin only) api end point:
-  <ul>
-    <li *ngFor="let member of members"> Name: {{member.firstName}} {{member.lastName}}, Username: {{member.username}}, Email: {{member.email}}, Role: {{member.role}}</li>
-  </ul>
-</div>
+</form>
 

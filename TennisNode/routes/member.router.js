@@ -7,6 +7,7 @@ const authorize = require('../_helpers/authorize');
 
 router.post('/authenticate', memberController.authenticate);
 router.post('/register', memberController.register);
+router.post('/renew', memberController.renew);
 router.get('/allmembers', authorize(Role.admin),memberController.getAllMembers);
 router.get('/getgoals/:username', memberController.getGoals);
 router.post('/setgoals', memberController.setGoals);

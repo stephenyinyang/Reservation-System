@@ -58,7 +58,6 @@ export class RegisterComponent implements OnInit {
       racketStrings: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')]],
       username: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]+$')]],
       password: ['', [Validators.required, Validators.minLength(6)]]
-
     });
 
     this.roles = [{name: 'Member'},
@@ -107,9 +106,13 @@ export class RegisterComponent implements OnInit {
       console.log('Error in onSubmit()');
       return;
     }
-
+    console.log("WTF");
     this.loading = true;
-    this.memberService.register(this.registerForm.value)
+    var newMember = this.registerForm.value;
+    newMember.isMember = true;
+    newMember.lastMembershipRenewal = new Date();
+    console.log(newMember);
+    this.memberService.register(newMember)
       .pipe(first())
       .subscribe(
         data => {
