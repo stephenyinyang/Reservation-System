@@ -11,6 +11,7 @@ import {MaterialModule} from './material-module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AdminComponent } from './admin/admin.component';
+import { RenewComponent } from './renew/renew.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { MemberviewComponent } from './memberview/memberview.component';
 import { RequestReservationComponent } from './request-reservation/request-reservation.component';
@@ -34,7 +35,8 @@ import {MatIconModule} from '@angular/material';
     RegisterComponent,
     ReservationComponent,
     MemberviewComponent,
-    RequestReservationComponent
+    RequestReservationComponent,
+    RenewComponent
   ],
   imports: [
     BrowserModule,

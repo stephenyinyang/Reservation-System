@@ -43,12 +43,8 @@ async function getByUsername(username) {
 }
 
 async function renew(memberParam) {
-    return await Member.updateOne({username: memberParam.username}, {$set: {isMember: true, lastMembershipRenewal: Date.now}});
-}
-
-async function addMember(memberParam) {
     var nextYear = new Date();
-    nextYear.setFullYear(nextYear.getFullYear() + 1);
+    nextYear.setMinutes(nextYear.getMinutes() + 1);
 
     var j = schedule.scheduleJob(nextYear, async function(){
         var transporter = nodemailer.createTransport({
@@ -78,6 +74,45 @@ async function addMember(memberParam) {
         await Member.updateOne({username: memberParam.username}, {$set: {isMember: false}});
     });
 
+    return await Member.updateOne({username: memberParam.username}, {$set: {isMember: true, lastMembershipRenewal: new Date()}});
+}
+
+async function addMember(memberParam) {
+    if (memberParam.role == "Member") {
+        console.log("WTF???");
+        var nextYear = new Date();
+        nextYear.setMinutes(nextYear.getMinutes() + 1);
+
+        var j = schedule.scheduleJob(nextYear, async function(){
+            var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'vttenniscenter@gmail.com',
+                pass: 'tenniscenter1'
+            }
+            });
+            
+            var mailOptions = {
+            from: 'vttenniscenter@gmail.com',
+            to: memberParam.email,
+            subject: 'Please Renew Your VT Tennis Center Membership',
+            text: 'Hello ' + memberParam.firstName + ',\n\n' +
+            'We would like to notify you that your membership at the Burrows-Burleson Tennis Center' +
+            ' has expired. Please renew your membership. Please call to let us know if you have any questions.\n\n' +
+            'Best wishes,\nJohn Pretz'
+            };
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+            await Member.updateOne({username: memberParam.username}, {$set: {isMember: false}});
+        });
+    }
+    
+
     // validate
     if (await Member.findOne({ username: memberParam.username })) {
         throw 'Username "' + memberParam.username + '" is already taken';
@@ -92,7 +127,6 @@ async function addMember(memberParam) {
     if (memberParam.password) {
         member.hash = bcrypt.hashSync(memberParam.password, 10);
     }
-
     // save member
     await member.save();
 

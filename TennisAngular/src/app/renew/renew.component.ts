@@ -79,12 +79,6 @@ export class RenewComponent implements OnInit {
       return;
     }
     this.submitted = true;
-    // stop here if form is invalid
-    if (this.renewForm.invalid) {
-      console.log('Error in onSubmit()');
-      return;
-    }
-
     this.loading = true;
     this.memberService.renew(this.currentMember)
       .pipe(first())

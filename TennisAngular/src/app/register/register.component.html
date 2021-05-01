@@ -7,11 +7,6 @@
     </mat-card-header>
 
     <mat-card-content>
-
-
-
-
-
       <div class="form-group">
         <mat-form-field>
           <input matInput placeholder="First Name" type="text" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
@@ -154,11 +149,19 @@
 
       <div class="form-group">
         <mat-form-field>
-          <mat-select placeholder="Role" formControlName="role">
+          <mat-select placeholder="Role" formControlName="role" [(ngModel)]="selectedRole">
             <mat-option [value]="role.name" *ngFor="let role of roles;">{{role.name}}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
+
+      <div *ngIf="selectedRole == 'Admin'">
+        <input matInput placeholder="Admin Password" type="password" id="adminPass">
+        <mat-hint *ngIf="submitted && f.password.errors" >
+          <mat-hint *ngIf="f.password.errors.required">admin password is required</mat-hint>
+        </mat-hint>
+      </div>
+      <br>
 
     <div *ngIf="!paidFor">
       <h3>Standard Membership - ${{ product.price }}</h3>

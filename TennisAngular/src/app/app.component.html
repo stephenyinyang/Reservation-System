@@ -4,6 +4,7 @@
   <button (click) = "myReservationsClick()" mat-button [routerLink]="['/myReservations']" *ngIf="isLoggedIn">My Reservations</button>
   <button mat-button (click)="login()" *ngIf="showLogin">Login/Register</button>
   <button mat-button (click)="logout()" *ngIf="isLoggedIn">Logout</button>
+  <button mat-button (click)="renew()" *ngIf="isMember">Renew</button>
 </mat-toolbar>
 
 <router-outlet></router-outlet>

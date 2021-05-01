@@ -61,4 +61,7 @@ export class AppComponent {
   admin() {
     this.router.navigate(['/admin']);
   }
+  renew() {
+    this.router.navigate(['/renew']);
+  }
 }

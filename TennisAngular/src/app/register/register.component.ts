@@ -19,6 +19,8 @@ declare var paypal;
 export class RegisterComponent implements OnInit {
   @ViewChild('paypal', {static: true}) paypalElement: ElementRef;  
   registerForm: FormGroup;
+  selectedRole: String;
+  adminPass: String;
   loading = false;
   submitted = false;
   roles = [];
@@ -96,6 +98,11 @@ export class RegisterComponent implements OnInit {
     return this.registerForm.controls; }
 
   onSubmit() {
+    if ((<HTMLInputElement>document.getElementById("adminPass"))) {
+      if ((<HTMLInputElement>document.getElementById("adminPass")).value == "123123") {
+        this.paidFor = true;
+      }
+    }
     if (!this.paidFor) {
       this.notification.showNotif("Must pay to register", "dismiss");
       return;
@@ -106,12 +113,10 @@ export class RegisterComponent implements OnInit {
       console.log('Error in onSubmit()');
       return;
     }
-    console.log("WTF");
     this.loading = true;
     var newMember = this.registerForm.value;
     newMember.isMember = true;
     newMember.lastMembershipRenewal = new Date();
-    console.log(newMember);
     this.memberService.register(newMember)
       .pipe(first())
       .subscribe(
