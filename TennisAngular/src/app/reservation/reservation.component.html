@@ -1,12 +1,8 @@
-<!-- add a tooltip that will show the username that created the parecord. Hint: https://stackblitz.com/angular/ygnjpyayagb?file=src%2Fapp%2Ftooltip-message-example.ts-->
-<mat-card class="reservation-card">
-
-  <section class="date">Reserved by: {{reservationRecord.createdBy.email}}</section>
-  <section class = "confirmed">Confirmed: {{reservationRecord.confirmed}}</section>
-  <section class="court"> Court: {{reservationRecord.court}}</section>
-  <section class="calories" >Start: {{reservationRecord.start | date:'medium'}}</section>
-  <section class="time">End: {{reservationRecord.end | date: 'medium'}}</section>
-
+<mat-list-item>
+   <p mat-line>{{ reservationRecord.createdBy.firstName }} {{ reservationRecord.createdBy.lastName }}</p>
+   <p mat-line>Court {{ reservationRecord.court }}</p>
+   <p mat-line>{{reservationRecord.start | date:'shortDate'}}, {{reservationRecord.start | date:'shortTime'}} - {{reservationRecord.end | date: 'shortTime'}}</p>     
+   
   <div class="menu">
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Delete or edit">
       <mat-icon>more_vert</mat-icon>
@@ -30,6 +26,5 @@
       </button>
     </mat-menu>
   </div>
-
-
-</mat-card>
+    <mat-divider [inset]="" ></mat-divider>
+</mat-list-item>

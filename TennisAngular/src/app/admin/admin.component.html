@@ -1,35 +1,60 @@
-<h1>Admin</h1>
-<p>This page can only be accessed by administrators.</p>
-<p>Unconfirmed Reservations:</p>
+<h1 style="text-align:center">Admin Page</h1>
+<p style="text-align:center"> Unconfirmed Reservations:</p>
 
-<div class="pa-record-container">
-
-  <reservation-component class="card-item" *ngFor="let reservationRecord of unconfirmedRecords" [reservationRecord]="reservationRecord"
+<mat-list dense>
+  <reservation-component *ngFor="let reservationRecord of unconfirmedRecords" [reservationRecord]="reservationRecord"
                          (confirmEvent) = "confirm()"></reservation-component>
-
-  <!--<div *ngFor="let parecord of parecords">{{parecord}}</div>-->
-
-</div>
-
+</mat-list>
 <br>
 
-<p>Confirmed Reservations:</p>
+<p style="text-align:center">Confirmed Reservations:</p>
 
-<div class="pa-record-container">
-
-  <reservation-component class="card-item" *ngFor="let reservationRecord of confirmedRecords" [reservationRecord]="reservationRecord"
+<mat-list dense>
+  <reservation-component *ngFor="let reservationRecord of confirmedRecords" [reservationRecord]="reservationRecord"
                          (confirmEvent) = "confirm()"></reservation-component>
-
-  <!--<div *ngFor="let parecord of parecords">{{parecord}}</div>-->
-
-</div>
-
+</mat-list>
 <br>
+<p style="text-align:center">All Members:</p>
 
-<div>
+<mat-list dense>
+  <mat-list-item *ngFor="let member of members">
+     <p mat-line>{{member.firstName}} {{member.lastName}}</p>
+     <p mat-line>Username: {{member.username}}</p>
+     <p mat-line>Email: {{member.email}}</p>  
+     <p mat-line>Role: {{member.role}}</p>       
+     <!--      
+  <div class="menu">
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Delete or edit">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngIf="isAdmin" (click)="confirm(reservationRecord)">
+        <mat-icon>done</mat-icon>
+        <span>Confirm</span>
+      </button>
+      <button mat-menu-item *ngIf="isAdmin" (click)="unconfirm(reservationRecord)">
+        <mat-icon>highlight_off</mat-icon>
+        <span>Unconfirm</span>
+      </button>
+      <button mat-menu-item *ngIf="isAdmin" (click)="deleteAdmin(reservationRecord)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+      <button mat-menu-item *ngIf="isMember" (click)="delete(reservationRecord)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </div> -->
+     <mat-divider [inset]="true" ></mat-divider>
+  </mat-list-item>
+</mat-list>
+
+<!-- <div>
   All members from secure (admin only) api end point:
+
   <ul>
     <li *ngFor="let member of members"> Name: {{member.firstName}} {{member.lastName}}, Username: {{member.username}}, Email: {{member.email}}, Role: {{member.role}}</li>
   </ul>
-</div>
+</div> -->
 
