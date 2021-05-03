@@ -12,9 +12,11 @@ import {ReservationService} from '../_services/reservation.service';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  sorts = [];
+  sortReservations = [];
+  sortMembers = [];
   lists = [];
-  sortBy: String;
+  sortByReservation: String;
+  sortByMember: String;
   selectedList: String;
   members: Member[] = [];
   unconfirmedRecords: Reservations[] = [];
@@ -33,14 +35,50 @@ export class AdminComponent implements OnInit {
     this.lists = [{name: 'Unconfirmed Reservations'},
       {name: 'Confirmed Reservations'}, {name: 'All Members'}];
     this.selectedList = "Unconfirmed Reservations";
-    this.sorts = [{name: 'Most Recent'},
-      {name: 'By Date'}, {name: 'By Name'}];
-    this.sortBy = "Most Recent"
+    this.sortReservations = [{name: 'Most Recent'},
+      {name: 'By Date'}, {name: 'By First Name'}, {name: 'By Last Name'}];
+    this.sortMembers = [{name: 'Newest'}, {name: 'By First Name'}, {name: 'By Last Name'}];
+    this.sortByReservation = "Most Recent";
+    this.sortByMember = "Newest";
   }
 
   confirm() {
     this.loadUnconfirmedReservations();
     this.loadConfirmedReservations();
+  }
+
+  changeSortReservations() {
+    if (this.sortByReservation == "Most Recent") {
+      this.loadUnconfirmedReservations();
+      this.loadConfirmedReservations();
+    }
+    else if (this.sortByReservation == "By Date"){
+      this.unconfirmedRecords.sort((a, b) => (a.start > b.start) ? 1 : -1);
+      this.confirmedRecords.sort((a, b) => (a.start > b.start) ? 1 : -1);
+    }
+    else if (this.sortByReservation == "By First Name") {
+      this.unconfirmedRecords.sort((a, b) => (a.createdBy.firstName > b.createdBy.firstName) ? 1 : -1);
+      this.confirmedRecords.sort((a, b) => (a.createdBy.firstName > b.createdBy.firstName) ? 1 : -1);
+    }
+    else if (this.sortByReservation == "By Last Name") {
+      this.unconfirmedRecords.sort((a, b) => (a.createdBy.lastName > b.createdBy.lastName) ? 1 : -1);
+      this.confirmedRecords.sort((a, b) => (a.createdBy.lastName > b.createdBy.lastName) ? 1 : -1);
+    }
+    
+  }
+
+  changeSortMembers() {
+    if (this.sortByMember == "Newest") {
+      this.memberService.getAll().pipe(first()).subscribe(members => {
+        this.members = members;
+      });
+    }
+    else if (this.sortByMember == "By First Name"){
+      this.members.sort((a, b) => (a.firstName > b.firstName) ? 1 : -1);
+    }
+    else if (this.sortByMember == "By Last Name") {
+      this.members.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1);
+    }
   }
 
   private loadConfirmedReservations() {

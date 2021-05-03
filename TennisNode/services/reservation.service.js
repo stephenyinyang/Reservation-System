@@ -80,7 +80,6 @@ async function deleteReservation(date, endDate, username, court) {
         await AvailableTimes.updateOne({day: avail.day}, {$set: {times: avail.times}});
       }
     }).catch(err => {throw err;});
-
     await Reservation.deleteOne({ createdBy: username, start: date, court: court });
 
   }

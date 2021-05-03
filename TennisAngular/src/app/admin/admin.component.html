@@ -3,8 +3,8 @@
   <mat-option [value]="list.name" *ngFor="let list of lists;">{{list.name}}</mat-option>
 </mat-select>
 <div *ngIf="selectedList == 'Unconfirmed Reservations'">
-  <mat-select class="sel" placeholder="Sort By" [(ngModel)]="sortBy">
-    <mat-option [value]="sort.name" *ngFor="let sort of sorts;">{{sort.name}}</mat-option>
+  <mat-select class="sel" placeholder="Sort By" [(ngModel)]="sortByReservation" (ngModelChange)="changeSortReservations()">
+    <mat-option [value]="sort.name" *ngFor="let sort of sortReservations;">{{sort.name}}</mat-option>
   </mat-select>
   <mat-list dense>
     <reservation-component *ngFor="let reservationRecord of unconfirmedRecords" [reservationRecord]="reservationRecord"
@@ -13,6 +13,9 @@
 </div>
 
 <div *ngIf="selectedList == 'Confirmed Reservations'">
+  <mat-select class="sel" placeholder="Sort By" [(ngModel)]="sortByReservation" (ngModelChange)="changeSortReservations()">
+    <mat-option [value]="sort.name" *ngFor="let sort of sortReservations;">{{sort.name}}</mat-option>
+  </mat-select>
 <mat-list dense>
   <reservation-component *ngFor="let reservationRecord of confirmedRecords" [reservationRecord]="reservationRecord"
                          (confirmEvent) = "confirm()"></reservation-component>
@@ -20,6 +23,9 @@
 </div>
 
 <div *ngIf="selectedList == 'All Members'">
+  <mat-select class="sel" placeholder="Sort By" [(ngModel)]="sortByMember" (ngModelChange)="changeSortMembers()">
+    <mat-option [value]="sort.name" *ngFor="let sort of sortMembers;">{{sort.name}}</mat-option>
+  </mat-select>
 <mat-list dense>
   <mat-list-item *ngFor="let member of members">
      <p mat-line>{{member.firstName}} {{member.lastName}}</p>

@@ -7,6 +7,10 @@ import {NotificationService} from '../_services/notification.service';
 import { AuthService } from '../_services/auth.service';
 import {Member} from '../_models/member';
 import {Role} from '../_models/role';
+import {MAT_DIALOG_DATA} from '@angular/material';
+import { Inject } from '@angular/core';
+import { HomeComponent } from '../home/home.component';
+import {MatDialogRef} from '@angular/material'
 
 @Component({
   selector: 'request-reservation',
@@ -33,7 +37,9 @@ export class RequestReservationComponent implements OnInit {
               private router: Router,
               private reservationService: ReservationService,
               private notification: NotificationService,
-              private auth: AuthService
+              private auth: AuthService,
+              public dialogRef: MatDialogRef<HomeComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.auth.currentMember.subscribe(x => this.currentMember = x);
   }
@@ -42,10 +48,10 @@ export class RequestReservationComponent implements OnInit {
   ngOnInit() {
     this.courts = [{name: 'Court 1'},
       {name: 'Court 2'}, {name: 'Court 3'}, {name: 'Court 4'}, {name: 'Court 5'}, {name: 'Court 6'} ];
-    this.startString = this.route.snapshot.params["start"];
-    this.currentDate = this.route.snapshot.params["day"];
-    this.timeIndex = this.route.snapshot.params["time"];
-    this.court = this.courts[this.route.snapshot.params["court"]].name;
+    this.startString = this.data.start;
+    this.currentDate = this.data.day;
+    this.timeIndex = this.data.time;
+    this.court = this.courts[this.data.court].name;
     this.requestForm = this.formBuilder.group({
       court: this.court,
       hours: ['']
@@ -95,7 +101,8 @@ export class RequestReservationComponent implements OnInit {
         .subscribe(
           resp => {
             this.notification.showNotif(resp, 'response');
-            this.router.navigate(['/.', {day: this.route.snapshot.params["day"]}]);
+            this.router.navigate(['/.', {day: this.data.day}]);
+            this.dialogRef.close();
             //this.notification.showNotif("Exercise Added Successfully!");
           },
           error => {
@@ -107,6 +114,7 @@ export class RequestReservationComponent implements OnInit {
   }
   cancel() {
     this.router.navigate(['/']);
+    this.dialogRef.close();
   }
   isAdmin() {
     return this.currentMember && this.currentMember.role === Role.admin;

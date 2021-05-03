@@ -7,6 +7,8 @@ import {ReservationService} from '../_services/reservation.service';
 import {Reservations} from '../_models/Reservations';
 import {Member} from '../_models/member';
 import {Role} from '../_models/role';
+import {MatDialog} from '@angular/material/dialog';
+import { RequestReservationComponent } from '../request-reservation/request-reservation.component';
 
 @Component({ templateUrl: 'home.component.html' ,
 
@@ -20,6 +22,7 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private reservationService: ReservationService,
     private authService: AuthService,
+    private dialog: MatDialog
   ) {
     this.authService.currentMember.subscribe(x => this.currentMember = x);
   }
@@ -174,6 +177,8 @@ export class HomeComponent implements OnInit {
   }
 
 
+
+
     changedDate(event: MatDatepickerInputEvent<Date>) {
       this.createdDate = event.value;
       this.updateTable();
@@ -186,7 +191,15 @@ export class HomeComponent implements OnInit {
           this.notifService.showNotif('This Time is Unavailable!');
         } else {
           this.request = true;
-          this.router.navigate(['/requestReservation', {start: cell, time: timeIndex, day: this.createdDate, court: index}]);
+          const dialogRef = this.dialog.open(RequestReservationComponent, {
+            data: {
+              start: cell, time: timeIndex, day: this.createdDate, court: index
+            }
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            this.updateTable();
+          });
+          //this.router.navigate(['/requestReservation', {start: cell, time: timeIndex, day: this.createdDate, court: index}]);
         }
       }
       else {
