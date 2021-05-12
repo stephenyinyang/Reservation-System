@@ -124,14 +124,14 @@ async function addReservation(parecord, username) {
     let i = (start - dayStart);
     if(i < 0)
     {
-      throw "Reservation Failed: Must start at or after 8:00AM EST"
+      throw "Reservation Failed: Out of time frame"
     }
     let offset = Math.floor(i/1800000);
     let courtNum = parseInt(parecord.court);
 
     if(dayEnd < new Date(parecord.end))
     {
-      throw "Reservation Failed: Goes past 10:30pm EST"
+      throw "Reservation Failed: Out of time frame"
     }
     for(i= i/1800000; i < numIntervals + offset ; i++)
     {

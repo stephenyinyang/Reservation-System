@@ -83,7 +83,6 @@ export class HomeComponent implements OnInit {
       this.times.push('9:00 PM');
       this.times.push('9:30 PM');
       this.times.push('10:00 PM');
-      this.times.push('10:30 PM');
       this.column_headers.push('Court 1');
       this.column_headers.push('Court 2');
       this.column_headers.push('Court 3');
@@ -95,9 +94,9 @@ export class HomeComponent implements OnInit {
       this.memberService.getDisabled().subscribe(
         option => {
           this.disabled = option.disabled;
-          if (option.disabled) {
+          if (option.disabled && !this.isAdmin) {
             for (let c = 0; c < 6; c++) {
-              for (let r = 0; r < 30; r++) {
+              for (let r = 0; r < 29; r++) {
                 const id = String(r) + String(c);
                 document.getElementById(id).innerHTML = '';
                 document.getElementById(id).className = 'disabled';
@@ -117,18 +116,7 @@ export class HomeComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          if (event.checked) {
-            for (let c = 0; c < 6; c++) {
-              for (let r = 0; r < 30; r++) {
-                const id = String(r) + String(c);
-                document.getElementById(id).className = 'disabled';
-                document.getElementById(id).innerHTML = '';
-              }
-            }
-          }
-          else {
-            this.updateTable();
-          }
+          this.updateTable();
           if (event.checked) {
             this.notifService.showNotif('Reservations are now closed!', 'dismiss');
           }
@@ -142,7 +130,7 @@ export class HomeComponent implements OnInit {
     }
     updateTable() {
     for (let c = 0; c < 6; c++) {
-      for (let r = 0; r < 30; r++) {
+      for (let r = 0; r < 29; r++) {
         const id = String(r) + String(c);
         document.getElementById(id).className = 'cell';
         document.getElementById(id).innerHTML = '';
@@ -232,9 +220,9 @@ export class HomeComponent implements OnInit {
     this.memberService.getDisabled().subscribe(
       option => {
         this.disabled = option.disabled;
-        if (option.disabled) {
+        if (option.disabled && !this.isAdmin) {
           for (let c = 0; c < 6; c++) {
-            for (let r = 0; r < 30; r++) {
+            for (let r = 0; r < 29; r++) {
               const id = String(r) + String(c);
               document.getElementById(id).innerHTML = '';
               document.getElementById(id).className = 'disabled';
@@ -267,9 +255,9 @@ export class HomeComponent implements OnInit {
           this.memberService.getDisabled().subscribe(
             option => {
               this.disabled = option.disabled;
-              if (option.disabled) {
+              if (option.disabled && !this.isAdmin) {
                 for (let c = 0; c < 6; c++) {
-                  for (let r = 0; r < 30; r++) {
+                  for (let r = 0; r < 29; r++) {
                     const id = String(r) + String(c);
                     document.getElementById(id).innerHTML = '';
                     document.getElementById(id).className = 'disabled';

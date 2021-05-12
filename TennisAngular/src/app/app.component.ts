@@ -56,7 +56,7 @@ export class AppComponent {
   logout() {
     this.authService.logout();
     this.notifService.showNotif('Logged out!', 'dismiss');
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
   admin() {
     this.router.navigate(['/admin']);
