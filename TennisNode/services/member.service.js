@@ -79,7 +79,6 @@ async function renew(memberParam) {
 
 async function addMember(memberParam) {
     if (memberParam.role == "Member") {
-        console.log("WTF???");
         var nextYear = new Date();
         nextYear.setMinutes(nextYear.getMinutes() + 1);
 

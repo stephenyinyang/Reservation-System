@@ -16,7 +16,8 @@ const secret = config.secret;
             '/member/authenticate',
             '/reservation/getAllReservations',
             '/reservation/getUnconfirmedReservations',
-            '/reservation/getConfirmedReservations'
+            '/reservation/getConfirmedReservations',
+            '/app/getDisabled'
             // pathToRegexp('/*')
         ]
     });}

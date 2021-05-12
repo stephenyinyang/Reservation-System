@@ -20,7 +20,6 @@ function authenticate(req, res, next) {
 }
 
 function getAllMembers(req, res, next) {
-    //  console.log("getAll", req.body);
     memberService.getAllMembers()
         .then(members => res.json(members))
         .catch(err => next(err));

@@ -23,6 +23,7 @@ app.use(jwt());
 
 app.use('/member', require('./routes/member.router'));
 app.use('/reservation', require('./routes/reservation.router'));
+app.use('/app', require('./routes/app.router'));
 //app.use('/')
 app.use(errorHandler);
 

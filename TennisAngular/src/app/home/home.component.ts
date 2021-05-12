@@ -4,17 +4,21 @@ import {AuthService} from '../_services/auth.service';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ReservationService} from '../_services/reservation.service';
+import {MemberService} from '../_services/member.service';
 import {Reservations} from '../_models/Reservations';
 import {Member} from '../_models/member';
 import {Role} from '../_models/role';
+import {App} from '../_models/app';
 import {MatDialog} from '@angular/material/dialog';
 import { RequestReservationComponent } from '../request-reservation/request-reservation.component';
+import { MatSlideToggleChange } from '@angular/material';
+import { first } from 'rxjs/operators';
 
 @Component({ templateUrl: 'home.component.html' ,
 
   styleUrls: ['home.component.css']})
 export class HomeComponent implements OnInit {
-
+  option: App;
 
   constructor(
     private notifService: NotificationService,
@@ -22,10 +26,12 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private reservationService: ReservationService,
     private authService: AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private memberService: MemberService
   ) {
     this.authService.currentMember.subscribe(x => this.currentMember = x);
   }
+  disabled: Boolean;
   currentMember: Member;
   request: boolean;
   reservations: Reservations[] = [];
@@ -40,9 +46,6 @@ export class HomeComponent implements OnInit {
     {court: 5, reserved: false, name: ''},
     {court: 6, reserved: false, name: ''}
   ];
-
-
-
   ngOnInit() {
       this.request = false;
       if (this.route.snapshot.params.day === undefined) {
@@ -51,7 +54,6 @@ export class HomeComponent implements OnInit {
       } else {
         this.createdDate = new Date(this.route.snapshot.params.day);
       }
-
       this.times.push('8:00 AM');
       this.times.push('8:30 AM');
       this.times.push('9:00 AM');
@@ -90,10 +92,54 @@ export class HomeComponent implements OnInit {
       this.column_headers.push('Court 6');
     }
     ngAfterViewInit() {
-      this.updateTable();
+      this.memberService.getDisabled().subscribe(
+        option => {
+          this.disabled = option.disabled;
+          if (option.disabled) {
+            for (let c = 0; c < 6; c++) {
+              for (let r = 0; r < 30; r++) {
+                const id = String(r) + String(c);
+                document.getElementById(id).innerHTML = '';
+                document.getElementById(id).className = 'disabled';
+              }
+            }
+          }
+          else {
+            this.updateTable();
+          }
+        }
+      );
     }
-
-
+    toggle(event: MatSlideToggleChange) {
+      this.memberService.setDisabled({
+        disable: event.checked
+      })
+      .pipe(first())
+      .subscribe(
+        data => {
+          if (event.checked) {
+            for (let c = 0; c < 6; c++) {
+              for (let r = 0; r < 30; r++) {
+                const id = String(r) + String(c);
+                document.getElementById(id).className = 'disabled';
+                document.getElementById(id).innerHTML = '';
+              }
+            }
+          }
+          else {
+            this.updateTable();
+          }
+          if (event.checked) {
+            this.notifService.showNotif('Reservations are now closed!', 'dismiss');
+          }
+          else {
+            this.notifService.showNotif('Reservations are now open!', 'dismiss');
+          }
+        },
+        error => {
+          this.notifService.showNotif(error, 'error');
+        });
+    }
     updateTable() {
     for (let c = 0; c < 6; c++) {
       for (let r = 0; r < 30; r++) {
@@ -119,7 +165,9 @@ export class HomeComponent implements OnInit {
                 endTimeIndex += 1;
               }
                 const nameID = String(startTimeIndex) + String(this.reservations[i].court - 1);
-                document.getElementById(nameID).innerHTML = this.reservations[i].createdBy.firstName;
+                if (this.isAdmin) {
+                  document.getElementById(nameID).innerHTML = this.reservations[i].createdBy.firstName;
+                }
                 for (let j = startTimeIndex; j < endTimeIndex; j++) {
                   const id = String(j) + String(this.reservations[i].court - 1);
                   document.getElementById(id).className = 'confirmed';
@@ -147,7 +195,9 @@ export class HomeComponent implements OnInit {
                 endTimeIndex += 1;
               }
               const nameID = String(startTimeIndex) + String(this.reservations[i].court - 1);
-              document.getElementById(nameID).innerHTML = this.reservations[i].createdBy.firstName;
+              if (this.isAdmin) {
+                document.getElementById(nameID).innerHTML = this.reservations[i].createdBy.firstName;
+              }
               for (let j = startTimeIndex; j < endTimeIndex; j++) {
                 const id = String(j) + String(this.reservations[i].court - 1);
                 document.getElementById(id).className = 'pending';
@@ -164,49 +214,80 @@ export class HomeComponent implements OnInit {
     return this.request;
   }
 
-  isAdmin() {
+  get isAdmin() {
     return this.currentMember && this.currentMember.role === Role.admin;
   }
+  
 
-  isMember() {
+  get isMember() {
     return this.currentMember && this.currentMember.role === Role.member;
   }
 
-  isLoggedIn() {
-    return this.isAdmin() || this.isMember();
+  get isLoggedIn() {
+    return this.isAdmin || this.isMember;
   }
 
-
-
-
-    changedDate(event: MatDatepickerInputEvent<Date>) {
-      this.createdDate = event.value;
-      this.updateTable();
-    }
-
-    edit(cell: string, index: number, timeIndex: number) {
-      if (this.isLoggedIn()) {
-        if ( document.getElementById(String(timeIndex) + String(index)).className === 'pending' ||
-          document.getElementById(String(timeIndex) + String(index)).className === 'confirmed') {
-          this.notifService.showNotif('This Time is Unavailable!');
-        } else {
-          this.request = true;
-          const dialogRef = this.dialog.open(RequestReservationComponent, {
-            data: {
-              start: cell, time: timeIndex, day: this.createdDate, court: index
+  changedDate(event: MatDatepickerInputEvent<Date>) {
+    this.createdDate = event.value;
+    this.memberService.getDisabled().subscribe(
+      option => {
+        this.disabled = option.disabled;
+        if (option.disabled) {
+          for (let c = 0; c < 6; c++) {
+            for (let r = 0; r < 30; r++) {
+              const id = String(r) + String(c);
+              document.getElementById(id).innerHTML = '';
+              document.getElementById(id).className = 'disabled';
             }
-          });
-          dialogRef.afterClosed().subscribe(result => {
-            this.updateTable();
-          });
-          //this.router.navigate(['/requestReservation', {start: cell, time: timeIndex, day: this.createdDate, court: index}]);
+          }
+        }
+        else {
+          this.updateTable();
         }
       }
+    );
+  }
+
+  edit(cell: string, index: number, timeIndex: number) {
+    if (this.isLoggedIn) {
+      if ( document.getElementById(String(timeIndex) + String(index)).className === 'pending' ||
+        document.getElementById(String(timeIndex) + String(index)).className === 'confirmed') {
+        this.notifService.showNotif('This Time is Unavailable!');
+      } else if (document.getElementById(String(timeIndex) + String(index)).className === 'disabled') {
+        this.notifService.showNotif('Requesting is Unavailable at This Time!');
+      }
       else {
-        this.notifService.showNotif('Must be a member to reserve online!', 'dismiss');
+        this.request = true;
+        const dialogRef = this.dialog.open(RequestReservationComponent, {
+          data: {
+            start: cell, time: timeIndex, day: this.createdDate, court: index
+          }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+          this.memberService.getDisabled().subscribe(
+            option => {
+              this.disabled = option.disabled;
+              if (option.disabled) {
+                for (let c = 0; c < 6; c++) {
+                  for (let r = 0; r < 30; r++) {
+                    const id = String(r) + String(c);
+                    document.getElementById(id).innerHTML = '';
+                    document.getElementById(id).className = 'disabled';
+                  }
+                }
+              }
+              else {
+                this.updateTable();
+              }
+            }
+          );
+        });
+        //this.router.navigate(['/requestReservation', {start: cell, time: timeIndex, day: this.createdDate, court: index}]);
       }
     }
-
-
+    else {
+      this.notifService.showNotif('Must be a member to reserve online!', 'dismiss');
+    }
+  }
 }
 

@@ -6,6 +6,9 @@
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
+  <mat-slide-toggle class = "toggle" [checked]="disabled" (change)="toggle($event)" *ngIf="isAdmin">
+    Close Reservations
+  </mat-slide-toggle>
 </div>
 <!--//<request-reservation *ngIf="requesting" class = "reserve"></request-reservation>-->
 <div class = "reservations">

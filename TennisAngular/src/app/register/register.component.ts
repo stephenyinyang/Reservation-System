@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
   roles = [];
 
   product = {
-    price: 0.01,
+    price: 85,
     description: "Standard Membership"
   };
 

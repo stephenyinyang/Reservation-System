@@ -25,7 +25,7 @@ export class RenewComponent implements OnInit {
   currentMember: Member;
 
   product = {
-    price: 0.01,
+    price: 85,
     description: "Standard Membership"
   };
 

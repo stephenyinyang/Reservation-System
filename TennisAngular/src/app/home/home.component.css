@@ -7,6 +7,9 @@ th, td{
   width: 175px;
   text-align: center;
 }
+.toggle {
+  padding-left: 50px;
+}
 
 .time, .header {
   font-weight: bold;
@@ -43,6 +46,10 @@ th, td{
 
 .confirmed {
   background-color: limegreen;
+}
+
+.disabled {
+  background-color: grey;
 }
 
 /*[id='11'] {*/
